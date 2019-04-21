@@ -7,6 +7,23 @@ export class UI
     UI_win_setting?: object
     cmd?: Handler
 
+    static current_ui: UI
+
+    static set_current_ui(_ui: UI)
+    {
+        this.current_ui = _ui
+    }
+
+    static get_current_ui(): UI
+    {
+        return this.current_ui
+    }
+
+    static log(msg: string | number)
+    {
+        this.get_current_ui().send(msg)
+    }
+
     constructor(win_setting?:object)
     {
         let defalut_setting = {
