@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="dist/css/cmd.min.css">
+    <style>
+        #cmd2{
+            font-size: 16px;
+            font-family: "微软雅黑";
+            color: #fff;
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            white-space: pre-wrap;
+        }
+        .grey_text{
+            color: #fff;
+        }
+    </style>
+    <title>需要一个标题</title>
+</head>
+<body>
+    <script type="text/javascript" src="dist/js/cmd.min.js"></script>
+    在加载中...
+    <div id="cmd2" class=".cmd-interface"></div>
+    <script type="text/javascript">
+        window.$ = window.jQuery = require('jQuery');
+        const { ipcRenderer } = require('electron');
+        
+        var interface2 = new Cmd({
+            selector: '#cmd2',
+            busy_text: "处理中...",
+            // dark_css: 'dist/cmd_dark.min.css',
+            // light_css: 'dist/cmd_light.min.css',
+            history_id: 'interface2',
+            // tabcomplete_url: 'tabcomplete.json',
+            // remote_cmd_list_url: 'commands.json',
+            external_processor: function(input, cmd)  {
+                ipcRenderer.send("cmd_stdin", input);
+                return true;
+            }
+        });
+        
+        ipcRenderer.on("cmd_stdout", (event, msg) =>
+        {
+            interface2.handleResponse({
+                cmd_out: msg
+            });
+        })
+
+        ipcRenderer.send("ui_loaded");
+    </script>
+</body>
+</html>
