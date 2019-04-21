@@ -20,7 +20,7 @@ export class UI
         this.UI_win_setting = defalut_setting;
     }
 
-    async init_win(cmd_text?: string)
+    async init_win(_option?: {cmd_text: string, cmd_title: string})
     {
         this.UI_win = new BrowserWindow(this.UI_win_setting)
         this.UI_win.loadFile(`${__dirname}/../UIPAGES/index.html`)
@@ -32,9 +32,10 @@ export class UI
             })
         })
         this.cmd = new Handler(this.UI_win)
-        if(!_.isUndefined(cmd_text))
+        if(!_.isUndefined(_option))
         {
-            this.cmd.send(cmd_text)
+            this.set_title(_option.cmd_title)
+            this.cmd.send(_option.cmd_text)
         }
     }
 
@@ -46,5 +47,10 @@ export class UI
     on_msg(_func: (msg: any, handler?: Handler) => void)
     {
         (<Handler>this.cmd).on_msg(_func)
+    }
+
+    set_title(title_text: string)
+    {
+        (<Handler>this.cmd).set_title(title_text)
     }
 }

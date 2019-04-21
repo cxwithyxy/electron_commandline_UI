@@ -52,6 +52,11 @@
             });
         })
 
+        ipcRenderer.on(`cmd_title_set`, (event, msg) =>
+        {
+            document.querySelectorAll(`title`)[0].innerHTML = msg;
+        })
+
         ipcRenderer.send("ui_loaded");
     </script>
 </body>

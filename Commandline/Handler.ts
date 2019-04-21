@@ -24,4 +24,9 @@ export class Handler
     {
         this.on_msg_callback = _func
     }
+
+    set_title(title_text: string)
+    {
+        this.win.webContents.send(`cmd_title_set`, title_text)
+    }
 }
