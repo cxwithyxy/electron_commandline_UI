@@ -1,0 +1,12 @@
+{
+  "name": "electron_commandline_UI",
+  "version": "1.0.0",
+  "main": "commandline.ts",
+  "repository": "https://github.com/cxwithyxy/electron_commandline_UI.git",
+  "author": "chenxuan <523764720@qq.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^4.1.4",
+    "typescript": "^3.4.4"
+  }
+}

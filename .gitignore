@@ -1,2 +1,3 @@
 *.js
 !UIPAGES/**/*.js
+node_modules/
