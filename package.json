@@ -6,7 +6,11 @@
   "author": "chenxuan <523764720@qq.com>",
   "license": "MIT",
   "devDependencies": {
+    "@types/lodash": "^4.14.123",
     "electron": "^4.1.4",
     "typescript": "^3.4.4"
+  },
+  "dependencies": {
+    "lodash": "^4.17.11"
   }
 }
