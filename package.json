@@ -1,6 +1,6 @@
 {
   "name": "electron_commandline_UI",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "commandline.js",
   "repository": "https://github.com/cxwithyxy/electron_commandline_UI.git",
   "author": "chenxuan <523764720@qq.com>",
@@ -11,7 +11,11 @@
     "typescript": "^3.4.4"
   },
   "dependencies": {
+    "jquery": "^3.4.0",
     "lodash": "^4.17.11"
+  },
+  "scripts": {
+    "test": "tsc && electron ./test/a.js"
   },
   "types": "./commandline.d.ts",
   "typings": "./commandline.d.ts"
