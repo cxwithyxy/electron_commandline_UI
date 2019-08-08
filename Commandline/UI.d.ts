@@ -17,8 +17,25 @@ export declare class UI {
      */
     static log(msg: string | number): void;
     constructor(win_setting?: object);
+    /**
+     * 启动自动保存log文件的功能
+     *
+     * @param {string} [log_file_path=`ui_log.txt`] log文件路径
+     * @memberof UI
+     */
     enable_save_log_file(log_file_path?: string): void;
+    /**
+     * 关闭自动保存log文件功能
+     *
+     * @memberof UI
+     */
     disable_save_log_file(): void;
+    /**
+     * 写入log文件
+     *
+     * @param {string} log_str 要写入log文件的内容
+     * @memberof UI
+     */
     save_log_file(log_str: string): void;
     /**
      * 初始化cmd窗口, 注意这个是异步函数要await

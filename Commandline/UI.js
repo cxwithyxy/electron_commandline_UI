@@ -71,18 +71,35 @@ var UI = /** @class */ (function () {
     UI.log = function (msg) {
         this.get_current_ui().send(msg);
     };
+    /**
+     * 启动自动保存log文件的功能
+     *
+     * @param {string} [log_file_path=`ui_log.txt`] log文件路径
+     * @memberof UI
+     */
     UI.prototype.enable_save_log_file = function (log_file_path) {
         if (log_file_path === void 0) { log_file_path = "ui_log.txt"; }
         if (util_1.isUndefined(this.log_file_handle)) {
             this.log_file_handle = fs_1.default.openSync(log_file_path, "a");
         }
     };
+    /**
+     * 关闭自动保存log文件功能
+     *
+     * @memberof UI
+     */
     UI.prototype.disable_save_log_file = function () {
         if (!util_1.isUndefined(this.log_file_handle)) {
             fs_1.default.closeSync(this.log_file_handle);
             delete this.log_file_handle;
         }
     };
+    /**
+     * 写入log文件
+     *
+     * @param {string} log_str 要写入log文件的内容
+     * @memberof UI
+     */
     UI.prototype.save_log_file = function (log_str) {
         if (!util_1.isUndefined(this.log_file_handle)) {
             fs_1.default.writeSync(this.log_file_handle, log_str);

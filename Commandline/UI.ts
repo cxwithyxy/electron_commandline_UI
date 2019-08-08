@@ -50,6 +50,13 @@ export class UI
         this.UI_win_setting = defalut_setting;
     }
 
+
+    /**
+     * 启动自动保存log文件的功能
+     *
+     * @param {string} [log_file_path=`ui_log.txt`] log文件路径
+     * @memberof UI
+     */
     enable_save_log_file(log_file_path: string = `ui_log.txt`)
     {
         if(isUndefined(this.log_file_handle))
@@ -58,6 +65,12 @@ export class UI
         }
     }
 
+    
+    /**
+     * 关闭自动保存log文件功能
+     *
+     * @memberof UI
+     */
     disable_save_log_file()
     {
         if(!isUndefined(this.log_file_handle))
@@ -67,6 +80,12 @@ export class UI
         }
     }
 
+    /**
+     * 写入log文件
+     *
+     * @param {string} log_str 要写入log文件的内容
+     * @memberof UI
+     */
     save_log_file(log_str: string)
     {
         if(!isUndefined(this.log_file_handle))
