@@ -4,6 +4,7 @@ export declare class UI {
     UI_win?: BrowserWindow;
     UI_win_setting?: object;
     cmd?: Handler;
+    log_file_handle?: number;
     static current_ui: UI;
     static set_current_ui(_ui: UI): void;
     static get_current_ui(): UI;
@@ -16,6 +17,9 @@ export declare class UI {
      */
     static log(msg: string | number): void;
     constructor(win_setting?: object);
+    enable_save_log_file(log_file_path?: string): void;
+    disable_save_log_file(): void;
+    save_log_file(log_str: string): void;
     /**
      * 初始化cmd窗口, 注意这个是异步函数要await
      *
