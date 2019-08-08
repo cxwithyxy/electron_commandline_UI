@@ -3,6 +3,8 @@ import _ from "lodash";
 import { Handler } from "../commandline";
 import fs from "fs"
 import { isUndefined, log } from "util";
+import moment from "moment"
+
 export class UI
 {
     UI_win?: BrowserWindow
@@ -128,7 +130,8 @@ export class UI
      */
     send(msg: any)
     {
-        this.save_log_file(`cmd_out: ${msg}\n`)
+        let time_str = moment().format('YYYY-MM-DD_HH:mm:ss:SSS')
+        this.save_log_file(`${time_str} cmd_out: ${msg}\n`)
         ;(<Handler>this.cmd).send(msg)
     }
 
@@ -144,7 +147,8 @@ export class UI
 
         ;(<Handler>this.cmd).on_msg((msg, handler) =>
         {
-            this.save_log_file(`cmd_in: ${msg}\n`)
+            let time_str = moment().format('YYYY-MM-DD_HH:mm:ss:SSS')
+            this.save_log_file(`${time_str} cmd_in: ${msg}\n`)
             _func(msg, handler)
         })
     }
