@@ -41,6 +41,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var electron_1 = require("electron");
 var lodash_1 = __importDefault(require("lodash"));
 var commandline_1 = require("../commandline");
+var fs_1 = __importDefault(require("fs"));
+var util_1 = require("util");
 var UI = /** @class */ (function () {
     function UI(win_setting) {
         UI.set_current_ui(this);
@@ -68,6 +70,40 @@ var UI = /** @class */ (function () {
      */
     UI.log = function (msg) {
         this.get_current_ui().send(msg);
+    };
+    /**
+     * 启动自动保存log文件的功能
+     *
+     * @param {string} [log_file_path=`ui_log.txt`] log文件路径
+     * @memberof UI
+     */
+    UI.prototype.enable_save_log_file = function (log_file_path) {
+        if (log_file_path === void 0) { log_file_path = "ui_log.txt"; }
+        if (util_1.isUndefined(this.log_file_handle)) {
+            this.log_file_handle = fs_1.default.openSync(log_file_path, "a");
+        }
+    };
+    /**
+     * 关闭自动保存log文件功能
+     *
+     * @memberof UI
+     */
+    UI.prototype.disable_save_log_file = function () {
+        if (!util_1.isUndefined(this.log_file_handle)) {
+            fs_1.default.closeSync(this.log_file_handle);
+            delete this.log_file_handle;
+        }
+    };
+    /**
+     * 写入log文件
+     *
+     * @param {string} log_str 要写入log文件的内容
+     * @memberof UI
+     */
+    UI.prototype.save_log_file = function (log_str) {
+        if (!util_1.isUndefined(this.log_file_handle)) {
+            fs_1.default.writeSync(this.log_file_handle, log_str);
+        }
     };
     /**
      * 初始化cmd窗口, 注意这个是异步函数要await
@@ -106,6 +142,7 @@ var UI = /** @class */ (function () {
      * @memberof UI
      */
     UI.prototype.send = function (msg) {
+        this.save_log_file("cmd_out: " + msg + "\n");
         this.cmd.send(msg);
     };
     /**
@@ -115,7 +152,12 @@ var UI = /** @class */ (function () {
      * @memberof UI
      */
     UI.prototype.on_msg = function (_func) {
-        this.cmd.on_msg(_func);
+        var _this = this;
+        ;
+        this.cmd.on_msg(function (msg, handler) {
+            _this.save_log_file("cmd_in: " + msg + "\n");
+            _func(msg, handler);
+        });
     };
     /**
      * 清空屏幕

@@ -1,11 +1,14 @@
 import { BrowserWindow, ipcMain } from "electron";
 import _ from "lodash";
 import { Handler } from "../commandline";
+import fs from "fs"
+import { isUndefined, log } from "util";
 export class UI
 {
     UI_win?: BrowserWindow
     UI_win_setting?: object
     cmd?: Handler
+    log_file_handle?: number
 
     static current_ui: UI
 
@@ -47,7 +50,50 @@ export class UI
         this.UI_win_setting = defalut_setting;
     }
 
+
+    /**
+     * 启动自动保存log文件的功能
+     *
+     * @param {string} [log_file_path=`ui_log.txt`] log文件路径
+     * @memberof UI
+     */
+    enable_save_log_file(log_file_path: string = `ui_log.txt`)
+    {
+        if(isUndefined(this.log_file_handle))
+        {
+            this.log_file_handle = fs.openSync(log_file_path, "a")
+        }
+    }
+
     
+    /**
+     * 关闭自动保存log文件功能
+     *
+     * @memberof UI
+     */
+    disable_save_log_file()
+    {
+        if(!isUndefined(this.log_file_handle))
+        {
+            fs.closeSync(this.log_file_handle)
+            delete this.log_file_handle
+        }
+    }
+
+    /**
+     * 写入log文件
+     *
+     * @param {string} log_str 要写入log文件的内容
+     * @memberof UI
+     */
+    save_log_file(log_str: string)
+    {
+        if(!isUndefined(this.log_file_handle))
+        {
+            fs.writeSync(this.log_file_handle, log_str)
+        }
+    }
+
     /**
      * 初始化cmd窗口, 注意这个是异步函数要await
      *
@@ -82,7 +128,8 @@ export class UI
      */
     send(msg: any)
     {
-        (<Handler>this.cmd).send(msg)
+        this.save_log_file(`cmd_out: ${msg}\n`)
+        ;(<Handler>this.cmd).send(msg)
     }
 
     
@@ -94,7 +141,12 @@ export class UI
      */
     on_msg(_func: (msg: any, handler?: Handler) => void)
     {
-        (<Handler>this.cmd).on_msg(_func)
+
+        ;(<Handler>this.cmd).on_msg((msg, handler) =>
+        {
+            this.save_log_file(`cmd_in: ${msg}\n`)
+            _func(msg, handler)
+        })
     }
 
 
