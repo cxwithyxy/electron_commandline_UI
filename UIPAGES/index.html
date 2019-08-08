@@ -57,6 +57,11 @@
             document.querySelectorAll(`title`)[0].innerHTML = msg;
         })
 
+        ipcRenderer.on(`cmd_cls`, (event, msg) =>
+        {
+            interface2.clearScreen();
+        })
+
         ipcRenderer.send("ui_loaded");
     </script>
 </body>

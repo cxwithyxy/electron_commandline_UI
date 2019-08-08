@@ -68,6 +68,11 @@ export class UI
         (<Handler>this.cmd).on_msg(_func)
     }
 
+    cls()
+    {
+        (<Handler>this.cmd).cls()
+    }
+
     set_title(title_text: string)
     {
         (<Handler>this.cmd).set_title(title_text)

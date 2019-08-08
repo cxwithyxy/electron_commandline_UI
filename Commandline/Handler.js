@@ -13,6 +13,9 @@ var Handler = /** @class */ (function () {
     Handler.prototype.send = function (msg) {
         this.win.webContents.send("cmd_stdout", msg);
     };
+    Handler.prototype.cls = function () {
+        this.win.webContents.send("cmd_cls");
+    };
     Handler.prototype.on_msg = function (_func) {
         this.on_msg_callback = _func;
     };

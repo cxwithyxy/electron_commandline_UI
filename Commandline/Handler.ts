@@ -20,6 +20,11 @@ export class Handler
         this.win.webContents.send(`cmd_stdout`, msg)
     }
 
+    cls()
+    {
+        this.win.webContents.send(`cmd_cls`)
+    }
+
     on_msg(_func: (msg: any, handler?: Handler) => void)
     {
         this.on_msg_callback = _func
@@ -29,4 +34,6 @@ export class Handler
     {
         this.win.webContents.send(`cmd_title_set`, title_text)
     }
+
+
 }

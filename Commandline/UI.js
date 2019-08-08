@@ -92,6 +92,9 @@ var UI = /** @class */ (function () {
     UI.prototype.on_msg = function (_func) {
         this.cmd.on_msg(_func);
     };
+    UI.prototype.cls = function () {
+        this.cmd.cls();
+    };
     UI.prototype.set_title = function (title_text) {
         this.cmd.set_title(title_text);
     };

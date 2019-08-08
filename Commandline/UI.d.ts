@@ -15,5 +15,6 @@ export declare class UI {
     }): Promise<void>;
     send(msg: any): void;
     on_msg(_func: (msg: any, handler?: Handler) => void): void;
+    cls(): void;
     set_title(title_text: string): void;
 }
