@@ -5,6 +5,7 @@ app.on("ready", async () =>
 {
     let my_ui = new UI()
     await my_ui.init_win()
+    my_ui.set_title("test")
     my_ui.on_msg( (msg:string ) => 
     {
         if(msg == "cls")

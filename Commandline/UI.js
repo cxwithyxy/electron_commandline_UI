@@ -59,9 +59,22 @@ var UI = /** @class */ (function () {
     UI.get_current_ui = function () {
         return this.current_ui;
     };
+    /**
+     * 在当前cmd界面上显示内容, 注意是当前
+     *
+     * @static
+     * @param {(string | number)} msg
+     * @memberof UI
+     */
     UI.log = function (msg) {
         this.get_current_ui().send(msg);
     };
+    /**
+     * 初始化cmd窗口, 注意这个是异步函数要await
+     *
+     * @param {{cmd_text: string, cmd_title: string}} [_option]
+     * @memberof UI
+     */
     UI.prototype.init_win = function (_option) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -86,15 +99,38 @@ var UI = /** @class */ (function () {
             });
         });
     };
+    /**
+     * 在cmd界面上显示内容
+     *
+     * @param {*} msg 要显示的内容
+     * @memberof UI
+     */
     UI.prototype.send = function (msg) {
         this.cmd.send(msg);
     };
+    /**
+     * 设置回调函数, 处理用户输入后内容
+     *
+     * @param {(msg: any, handler?: Handler) => void} _func 一个函数, msg就是用户输入的内容
+     * @memberof UI
+     */
     UI.prototype.on_msg = function (_func) {
         this.cmd.on_msg(_func);
     };
+    /**
+     * 清空屏幕
+     *
+     * @memberof UI
+     */
     UI.prototype.cls = function () {
         this.cmd.cls();
     };
+    /**
+     * 设置窗口标题
+     *
+     * @param {string} title_text
+     * @memberof UI
+     */
     UI.prototype.set_title = function (title_text) {
         this.cmd.set_title(title_text);
     };
