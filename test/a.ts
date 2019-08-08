@@ -8,10 +8,8 @@ app.on("ready", async () =>
     my_ui.set_title("test")
     my_ui.on_msg( (msg:string ) => 
     {
-        if(msg == "cls")
-        {
-            my_ui.cls()
-        }
         my_ui.send(`resv: ${msg}`)
     })
+    my_ui.enable_save_log_file()
+    my_ui.disable_save_log_file()
 })
