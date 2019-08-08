@@ -43,6 +43,7 @@ var lodash_1 = __importDefault(require("lodash"));
 var commandline_1 = require("../commandline");
 var fs_1 = __importDefault(require("fs"));
 var util_1 = require("util");
+var moment_1 = __importDefault(require("moment"));
 var UI = /** @class */ (function () {
     function UI(win_setting) {
         UI.set_current_ui(this);
@@ -142,7 +143,8 @@ var UI = /** @class */ (function () {
      * @memberof UI
      */
     UI.prototype.send = function (msg) {
-        this.save_log_file("cmd_out: " + msg + "\n");
+        var time_str = moment_1.default().format('YYYY-MM-DD_HH:mm:ss:SSS');
+        this.save_log_file(time_str + " cmd_out: " + msg + "\n");
         this.cmd.send(msg);
     };
     /**
@@ -155,7 +157,8 @@ var UI = /** @class */ (function () {
         var _this = this;
         ;
         this.cmd.on_msg(function (msg, handler) {
-            _this.save_log_file("cmd_in: " + msg + "\n");
+            var time_str = moment_1.default().format('YYYY-MM-DD_HH:mm:ss:SSS');
+            _this.save_log_file(time_str + " cmd_in: " + msg + "\n");
             _func(msg, handler);
         });
     };
