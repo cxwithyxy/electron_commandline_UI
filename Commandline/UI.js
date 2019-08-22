@@ -2,12 +2,18 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const electron_1 = require("electron");
-const lodash_1 = __importDefault(require("lodash"));
 const fs_1 = __importDefault(require("fs"));
 const util_1 = require("util");
 const moment_1 = __importDefault(require("moment"));
+const child_process = __importStar(require("child_process"));
 class UI {
     static set_current_ui(_ui) {
         this.current_ui = _ui;
@@ -26,18 +32,19 @@ class UI {
         this.get_current_ui().send(msg);
     }
     constructor(win_setting) {
-        UI.set_current_ui(this);
-        let defalut_setting = {
-            width: 600,
-            height: 600 / 4 * 3,
-            webPreferences: {
-                preload: `${__dirname}/../src_in_browser/Main_app.js`
-            }
-        };
-        if (!lodash_1.default.isUndefined(win_setting)) {
-            defalut_setting = lodash_1.default.merge(defalut_setting, win_setting);
-        }
-        this.UI_win_setting = defalut_setting;
+        // UI.set_current_ui(this)
+        // let defalut_setting = {
+        //     width: 600
+        //     ,height: 600 / 4 * 3
+        //     ,webPreferences: {
+        //         preload: `${__dirname}/../src_in_browser/Main_app.js`
+        //     }
+        // }
+        // if(!_.isUndefined(win_setting))
+        // {
+        //     defalut_setting = _.merge(defalut_setting, win_setting)
+        // }
+        // this.UI_win_setting = defalut_setting;
     }
     /**
      * 启动自动保存log文件的功能
@@ -79,12 +86,30 @@ class UI {
      * @memberof UI
      */
     async init_win(_option) {
-        this.UI_win = new electron_1.BrowserWindow(this.UI_win_setting);
-        await this.UI_win.loadURL(`${__dirname}/../UIPAGES/index.html`);
-        this.UI_win.webContents.executeJavaScript(`main_app = new Main_app()`);
-        this.UI_win.on("resize", () => {
-            this.UI_win.webContents.executeJavaScript(`main_app.fit_screen()`);
+        this.enable_save_log_file();
+        let cmd_p = child_process.spawn("conhost");
+        cmd_p.stdout.on('data', (data) => {
+            console.log(`child stdout:\n${data}`);
+            this.save_log_file(data);
         });
+        cmd_p.on('close', (code) => {
+            console.log(`child process exited with code ${code}`);
+        });
+        setInterval(() => {
+            if (!cmd_p.killed) {
+                cmd_p.stdin.write("echo 1");
+                console.log("adasdasdasd");
+            }
+        }, 1e3);
+        await new Promise((succ) => {
+        });
+        // this.UI_win = new BrowserWindow(this.UI_win_setting)
+        // await this.UI_win.loadURL(`${__dirname}/../UIPAGES/index.html`)
+        // this.UI_win.webContents.executeJavaScript(`main_app = new Main_app()`)
+        // this.UI_win.on("resize", () =>
+        // {
+        //     this.UI_win.webContents.executeJavaScript(`main_app.fit_screen()`)
+        // })
         // await new Promise((succ) =>
         // {
         //     ipcMain.once("ui_loaded", (e:any, msg: any) =>
