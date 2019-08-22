@@ -44,6 +44,9 @@ export class UI
         let defalut_setting = {
             width: 600
             ,height: 650
+            ,webPreferences: {
+                preload: `${__dirname}/../src_in_browser/Main_app.js`
+            }
         }
         if(!_.isUndefined(win_setting))
         {
@@ -105,20 +108,21 @@ export class UI
     async init_win(_option?: {cmd_text: string, cmd_title: string})
     {
         this.UI_win = new BrowserWindow(this.UI_win_setting)
-        this.UI_win.loadFile(`${__dirname}/../UIPAGES/index.html`)
-        await new Promise((succ) =>
-        {
-            ipcMain.once("ui_loaded", (e:any, msg: any) =>
-            {
-                succ()
-            })
-        })
-        this.cmd = new Handler(this.UI_win)
-        if(!_.isUndefined(_option))
-        {
-            this.set_title(_option.cmd_title)
-            this.cmd.send(_option.cmd_text)
-        }
+        await this.UI_win.loadURL(`${__dirname}/../UIPAGES/index.html`)
+        await this.UI_win.webContents.executeJavaScript(`new Main_app()`)
+        // await new Promise((succ) =>
+        // {
+        //     ipcMain.once("ui_loaded", (e:any, msg: any) =>
+        //     {
+        //         succ()
+        //     })
+        // })
+        // this.cmd = new Handler(this.UI_win)
+        // if(!_.isUndefined(_option))
+        // {
+        //     this.set_title(_option.cmd_title)
+        //     this.cmd.send(_option.cmd_text)
+        // }
     }
 
     
