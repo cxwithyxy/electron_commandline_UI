@@ -1,7 +1,7 @@
 import { BrowserWindow } from "electron";
 import { Handler } from "../commandline";
 export declare class UI {
-    UI_win?: BrowserWindow;
+    UI_win: BrowserWindow;
     UI_win_setting?: object;
     cmd?: Handler;
     log_file_handle?: number;

@@ -7,7 +7,7 @@ import moment from "moment"
 
 export class UI
 {
-    UI_win?: BrowserWindow
+    UI_win!: BrowserWindow
     UI_win_setting?: object
     cmd?: Handler
     log_file_handle?: number
@@ -43,7 +43,7 @@ export class UI
         
         let defalut_setting = {
             width: 600
-            ,height: 650
+            ,height: 600 / 4 * 3
             ,webPreferences: {
                 preload: `${__dirname}/../src_in_browser/Main_app.js`
             }
@@ -109,7 +109,11 @@ export class UI
     {
         this.UI_win = new BrowserWindow(this.UI_win_setting)
         await this.UI_win.loadURL(`${__dirname}/../UIPAGES/index.html`)
-        await this.UI_win.webContents.executeJavaScript(`new Main_app()`)
+        this.UI_win.webContents.executeJavaScript(`main_app = new Main_app()`)
+        this.UI_win.on("resize", () =>
+        {
+            this.UI_win.webContents.executeJavaScript(`main_app.fit_screen()`)
+        })
         // await new Promise((succ) =>
         // {
         //     ipcMain.once("ui_loaded", (e:any, msg: any) =>

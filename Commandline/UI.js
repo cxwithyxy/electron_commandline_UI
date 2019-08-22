@@ -29,7 +29,7 @@ class UI {
         UI.set_current_ui(this);
         let defalut_setting = {
             width: 600,
-            height: 650,
+            height: 600 / 4 * 3,
             webPreferences: {
                 preload: `${__dirname}/../src_in_browser/Main_app.js`
             }
@@ -81,7 +81,10 @@ class UI {
     async init_win(_option) {
         this.UI_win = new electron_1.BrowserWindow(this.UI_win_setting);
         await this.UI_win.loadURL(`${__dirname}/../UIPAGES/index.html`);
-        await this.UI_win.webContents.executeJavaScript(`new Main_app()`);
+        this.UI_win.webContents.executeJavaScript(`main_app = new Main_app()`);
+        this.UI_win.on("resize", () => {
+            this.UI_win.webContents.executeJavaScript(`main_app.fit_screen()`);
+        });
         // await new Promise((succ) =>
         // {
         //     ipcMain.once("ui_loaded", (e:any, msg: any) =>
