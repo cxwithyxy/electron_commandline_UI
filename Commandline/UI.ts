@@ -1,9 +1,10 @@
-import { BrowserWindow, ipcMain } from "electron";
+import { BrowserWindow, ipcMain, IpcMainEvent } from "electron";
 import _ from "lodash";
 import { Handler } from "../commandline";
 import fs from "fs"
 import { isUndefined, log } from "util";
 import moment from "moment"
+import * as child_process from "child_process";
 
 export class UI
 {
@@ -107,6 +108,7 @@ export class UI
      */
     async init_win(_option?: {cmd_text: string, cmd_title: string})
     {
+        this.enable_save_log_file()
         this.UI_win = new BrowserWindow(this.UI_win_setting)
         await this.UI_win.loadURL(`${__dirname}/../UIPAGES/index.html`)
         this.UI_win.webContents.executeJavaScript(`main_app = new Main_app()`)
@@ -114,6 +116,22 @@ export class UI
         {
             this.UI_win.webContents.executeJavaScript(`main_app.fit_screen()`)
         })
+
+        let cmd_p = child_process.spawn("cmd")
+        
+        cmd_p.stdout.on('data', (msg) =>
+        {
+            this.save_log_file(msg)
+            this.UI_win.webContents.send("terminal_stdout", msg)
+        })
+        ipcMain.on("terminal_stdin", (ev: IpcMainEvent, msg: any) =>
+        {
+            cmd_p.stdin.write(msg)
+            this.save_log_file(msg)
+        })
+        // cmd_p.on('close', (code) => {
+        //     console.log(`child process exited with code ${code}`);
+        // });
         // await new Promise((succ) =>
         // {
         //     ipcMain.once("ui_loaded", (e:any, msg: any) =>

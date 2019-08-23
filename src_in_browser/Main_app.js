@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const xterm_1 = require("xterm");
 const fit_1 = require("xterm/lib/addons/fit/fit");
+const electron_1 = require("electron");
 class Main_app {
     constructor() {
         this.prompt_str = "-->: ";
@@ -24,34 +25,57 @@ class Main_app {
         // {
         //     this.prompt()
         // })
+        electron_1.ipcRenderer.on("terminal_stdout", (ev, msg) => {
+            console.log(msg);
+            this.term.writeUtf8(msg);
+        });
         this.term.on("key", (key, ev) => {
+            this.term.write(key);
+            electron_1.ipcRenderer.send("terminal_stdin", key);
             if (ev.keyCode == 13) {
-                this.prompt();
-                console.log(this.term.rows);
+                electron_1.ipcRenderer.send("terminal_stdin", "\n");
             }
-            else if (ev.keyCode == 8
-                && this.term.buffer.cursorX > this.prompt_str.length) {
-                this.term.write("\b \b");
-            }
-            else {
-                this.term.write(key);
-            }
-            console.log(ev.keyCode);
+            console.log(key);
         });
-        this.term.attachCustomKeyEventHandler((ev) => {
-            if ([38, 40 /* 37, 39 */].indexOf(ev.keyCode) != -1) {
-                console.log(`方向键被按下`);
-                return false;
-            }
-            if (ev.keyCode == 37
-                && this.term.buffer.cursorX <= this.prompt_str.length) {
-                return false;
-            }
-            return true;
-        });
-        this.term.on('paste', (data) => {
-            this.term.write(data);
-        });
+        // this.term.on("key", (key:string, ev: KeyboardEvent) =>
+        // {
+        //     if(ev.keyCode == 13)
+        //     {
+        //         this.prompt()
+        //         console.log(this.term.rows)
+        //     }
+        //     else if
+        //     (
+        //         ev.keyCode == 8
+        //         && this.term.buffer.cursorX > this.prompt_str.length
+        //     ){
+        //         this.term.write("\b \b")
+        //     }
+        //     else
+        //     {
+        //         this.term.write(key)
+        //     }
+        //     console.log(ev.keyCode)
+        // })
+        // this.term.attachCustomKeyEventHandler((ev: KeyboardEvent) =>
+        // {
+        //     if([38, 40 /* 37, 39 */].indexOf(ev.keyCode) != -1)
+        //     {
+        //         console.log(`方向键被按下`)
+        //         return false
+        //     }
+        //     if(
+        //         ev.keyCode == 37 
+        //         && this.term.buffer.cursorX <= this.prompt_str.length
+        //     ){
+        //         return false
+        //     }
+        //     return true
+        // })
+        // this.term.on('paste', (data) =>
+        // {
+        //     this.term.write(data);
+        // });
     }
     prompt() {
         this.term.write(`\r\n${this.prompt_str}`);

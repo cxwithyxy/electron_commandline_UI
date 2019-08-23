@@ -2,12 +2,20 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const electron_1 = require("electron");
 const lodash_1 = __importDefault(require("lodash"));
 const fs_1 = __importDefault(require("fs"));
 const util_1 = require("util");
 const moment_1 = __importDefault(require("moment"));
+const child_process = __importStar(require("child_process"));
 class UI {
     static set_current_ui(_ui) {
         this.current_ui = _ui;
@@ -79,12 +87,25 @@ class UI {
      * @memberof UI
      */
     async init_win(_option) {
+        this.enable_save_log_file();
         this.UI_win = new electron_1.BrowserWindow(this.UI_win_setting);
         await this.UI_win.loadURL(`${__dirname}/../UIPAGES/index.html`);
         this.UI_win.webContents.executeJavaScript(`main_app = new Main_app()`);
         this.UI_win.on("resize", () => {
             this.UI_win.webContents.executeJavaScript(`main_app.fit_screen()`);
         });
+        let cmd_p = child_process.spawn("cmd");
+        cmd_p.stdout.on('data', (msg) => {
+            this.save_log_file(msg);
+            this.UI_win.webContents.send("terminal_stdout", msg);
+        });
+        electron_1.ipcMain.on("terminal_stdin", (ev, msg) => {
+            cmd_p.stdin.write(msg);
+            this.save_log_file(msg);
+        });
+        // cmd_p.on('close', (code) => {
+        //     console.log(`child process exited with code ${code}`);
+        // });
         // await new Promise((succ) =>
         // {
         //     ipcMain.once("ui_loaded", (e:any, msg: any) =>
