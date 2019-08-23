@@ -2,3 +2,4 @@ node_modules/
 test/**/*.js
 test/**/*.d.ts
 ui_log.txt
+yarn-error.log
