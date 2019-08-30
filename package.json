@@ -1,13 +1,13 @@
 {
   "name": "electron_commandline_UI",
-  "version": "2.201908081400.0",
+  "version": "2.201908310152.0",
   "main": "commandline.js",
   "repository": "https://github.com/cxwithyxy/electron_commandline_UI.git",
   "author": "chenxuan <523764720@qq.com>",
   "license": "MIT",
   "devDependencies": {
     "@types/lodash": "^4.14.123",
-    "electron": "^4.1.4",
+    "electron": "6.0.6",
     "typescript": "^3.4.4"
   },
   "dependencies": {
