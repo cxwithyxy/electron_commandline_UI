@@ -49,7 +49,10 @@ var UI = /** @class */ (function () {
         UI.set_current_ui(this);
         var defalut_setting = {
             width: 600,
-            height: 650
+            height: 650,
+            webPreferences: {
+                nodeIntegration: true
+            }
         };
         if (!lodash_1.default.isUndefined(win_setting)) {
             defalut_setting = lodash_1.default.merge(defalut_setting, win_setting);
