@@ -1,6 +1,6 @@
 {
   "name": "electron_commandline_UI",
-  "version": "2.201908081400.0",
+  "version": "2.201908310152.0",
   "main": "commandline.js",
   "repository": "https://github.com/cxwithyxy/electron_commandline_UI.git",
   "author": "chenxuan <523764720@qq.com>",
