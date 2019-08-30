@@ -7,7 +7,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/lodash": "^4.14.123",
-    "electron": "^4.1.4",
+    "electron": "6.0.6",
     "typescript": "^3.4.4"
   },
   "dependencies": {
