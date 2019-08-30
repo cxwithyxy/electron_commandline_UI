@@ -44,6 +44,9 @@ export class UI
         let defalut_setting = {
             width: 600
             ,height: 650
+            ,webPreferences: {
+                nodeIntegration: true
+            }
         }
         if(!_.isUndefined(win_setting))
         {
