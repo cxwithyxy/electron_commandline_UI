@@ -13,7 +13,7 @@
   "dependencies": {
     "jquery": "^3.4.0",
     "lodash": "^4.17.13",
-    "moment": "^2.24.0"
+    "moment": "^2.29.4"
   },
   "scripts": {
     "test": "tsc && electron ./test/a.js"
